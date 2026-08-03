@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarketPulse / Code View</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: #111b2a;
+        --panel-alt: #182638;
+        --line: rgba(255,255,255,0.08);
+        --text: #e6edf5;
+        --muted: #9aa9bb;
+        --gold: #d7af60;
+        --green: #36d399;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #08131d 0%, #101c2a 100%);
+        color: var(--text);
+      }
+
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+      }
+
+      .heading {
+        margin-bottom: 24px;
+      }
+
+      .heading h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 3vw, 3rem);
+        letter-spacing: -0.05em;
+      }
+
+      .heading p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .code-box {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+      }
+
+      .code-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 18px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .red { background: #ff5f56; }
+      .amber { background: #ffbd2e; }
+      .green { background: #27c93f; }
+
+      pre {
+        margin: 0;
+        padding: 22px 20px 28px;
+        background: var(--panel-alt);
+        color: #dfeaf7;
+        overflow-x: auto;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      code {
+        font-family: Consolas, "Courier New", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="heading">
+        <h1>MarketPulse — Code View</h1>
+        <p>Open this page and inspect the full HTML, CSS, and JS structure.</p>
+      </div>
+
+      <div class="code-box">
+        <div class="code-toolbar">
+          <span class="dot red"></span>
+          <span class="dot amber"></span>
+          <span class="dot green"></span>
+        </div>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;meta
+      name="description"
+      content="MarketPulse provides professional Deriv trading bots, guided setup, and structured strategies for Kenyan traders seeking a cleaner, more disciplined trading workflow."
+    /&gt;
+    &lt;title&gt;MarketPulse | Deriv Trading Bots Kenya&lt;/title&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com" /&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /&gt;
+    &lt;link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    /&gt;
+    &lt;link rel="stylesheet" href="styles.css" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;header class="site-header"&gt;
+      &lt;div class="container nav-wrap"&gt;
+        &lt;a href="#top" class="brand" aria-label="MarketPulse home"&gt;
+          &lt;span class="brand-mark"&gt;MP&lt;/span&gt;
+          &lt;span class="brand-text"&gt;MarketPulse&lt;/span&gt;
+        &lt;/a&gt;
+
+        &lt;nav class="main-nav" aria-label="Main navigation"&gt;
+          &lt;a href="#bots"&gt;Bots&lt;/a&gt;
+          &lt;a href="#process"&gt;How it works&lt;/a&gt;
+          &lt;a href="#results"&gt;Results&lt;/a&gt;
+          &lt;a href="#pricing"&gt;Pricing&lt;/a&gt;
+        &lt;/nav&gt;
+
+        &lt;div class="nav-cta"&gt;
+          &lt;a href="#pricing" class="btn btn-secondary"&gt;Get Started&lt;/a&gt;
+          &lt;a href="#contact" class="btn btn-primary"&gt;Buy a Bot&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main id="top"&gt;
+      &lt;section class="hero"&gt;
+        &lt;div class="container hero-grid"&gt;
+          &lt;div class="hero-copy"&gt;
+            &lt;p class="eyebrow"&gt;Official Deriv bot solutions for Kenya&lt;/p&gt;
+            &lt;h1&gt;Trade 24/7 with structured strategies built for consistency.&lt;/h1&gt;
+            &lt;p class="lead"&gt;
+              Access plug-and-play Deriv DBot setups designed for volatility indices,
+              forex, and synthetic markets. Built to help you automate execution,
+              reduce manual errors, and trade with more discipline.
+            &lt;/p&gt;
+
+            &lt;div class="hero-actions"&gt;
+              &lt;a href="#bots" class="btn btn-primary"&gt;View Bot Packages&lt;/a&gt;
+              &lt;a href="#process" class="btn btn-secondary"&gt;How It Works&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+      </div>
+    </div>
+  </body>
+</html>

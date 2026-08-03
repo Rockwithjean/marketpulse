@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarketPulse | Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell settings-shell">
+      <button class="mobile-menu-toggle" aria-label="Open sidebar">☰</button>
+      <aside class="sidebar">
+        <div class="brand sidebar-brand">
+          <span class="brand-mark">MP</span>
+          <span class="brand-text">MarketPulse</span>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <a href="dashboard.html" class="nav-item">Overview</a>
+          <a href="dashboard.html" class="nav-item">Bots</a>
+          <a href="dashboard.html" class="nav-item">Performance</a>
+          <a href="dashboard.html" class="nav-item">Analytics</a>
+          <a href="settings.html" class="nav-item active">Settings</a>
+        </nav>
+
+        <div class="sidebar-card profile-card">
+          <div class="avatar-ring">JK</div>
+          <strong>John Kamau</strong>
+          <small>Pro trader</small>
+        </div>
+      </aside>
+
+      <main class="dashboard-main settings-main">
+        <header class="dashboard-topbar settings-topbar">
+          <div>
+            <p class="eyebrow accent">Profile</p>
+            <h1>Account settings</h1>
+          </div>
+          <div class="topbar-actions">
+            <a href="dashboard.html" class="btn btn-secondary small-btn">Back to dashboard</a>
+          </div>
+        </header>
+
+        <section class="settings-grid">
+          <div class="panel profile-panel">
+            <div class="panel-head">
+              <div>
+                <span class="mute-label">Personal</span>
+                <h3>Profile details</h3>
+              </div>
+            </div>
+
+            <div class="profile-header">
+              <div class="avatar-ring large-avatar">JK</div>
+              <div>
+                <strong>John Kamau</strong>
+                <small>Premium member</small>
+              </div>
+            </div>
+
+            <form id="settingsForm" class="settings-form">
+              <div class="two-col-grid">
+                <label>
+                  <span>Full name</span>
+                  <input type="text" value="John Kamau" />
+                </label>
+                <label>
+                  <span>Username</span>
+                  <input type="text" value="johnpulse" />
+                </label>
+              </div>
+
+              <div class="two-col-grid">
+                <label>
+                  <span>Email</span>
+                  <input type="email" value="john@marketpulse.co.ke" />
+                </label>
+                <label>
+                  <span>Phone</span>
+                  <input type="tel" value="+254 712 345 678" />
+                </label>
+              </div>
+
+              <label>
+                <span>Broker account</span>
+                <input type="text" value="Deriv Real Account" />
+              </label>
+
+              <button type="submit" class="btn btn-primary large">Save changes</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="mute-label">Preferences</span>
+                <h3>Trading settings</h3>
+              </div>
+            </div>
+
+            <div class="setting-list">
+              <div class="setting-item">
+                <div>
+                  <strong>Auto-optimization</strong>
+                  <small>Improve entries with adaptive filters</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <strong>WhatsApp alerts</strong>
+                  <small>Receive trade notifications</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <strong>Risk mode</strong>
+                  <small>Balanced capital allocation</small>
+                </div>
+                <select class="mini-select">
+                  <option>Balanced</option>
+                  <option>Aggressive</option>
+                  <option>Conservative</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarketPulse | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-shell">
+      <button class="mobile-menu-toggle" aria-label="Open sidebar">☰</button>
+      <aside class="sidebar">
+        <div class="brand sidebar-brand">
+          <span class="brand-mark">MP</span>
+          <span class="brand-text">MarketPulse</span>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Sidebar navigation">
+          <a href="#" class="nav-item active" data-target="overview-tab">Overview</a>
+          <a href="#" class="nav-item" data-target="bots-tab">Bots</a>
+          <a href="#" class="nav-item" data-target="performance-tab">Performance</a>
+          <a href="#" class="nav-item" data-target="reports-tab">Reports</a>
+          <a href="settings.html" class="nav-item">Settings</a>
+        </nav>
+
+        <div class="sidebar-card">
+          <span class="mute-label">Account health</span>
+          <strong>Excellent</strong>
+          <small>Last sync 4 mins ago</small>
+        </div>
+      </aside>
+
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div>
+            <p class="eyebrow accent">Dashboard</p>
+            <h1>Portfolio overview</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="btn btn-secondary small-btn">Export</button>
+            <button class="btn btn-primary small-btn">+ New strategy</button>
+          </div>
+        </header>
+
+        <div class="tab-strip">
+          <button type="button" class="tab-button active" data-tab="overview-tab">Overview</button>
+          <button type="button" class="tab-button" data-tab="bots-tab">Bots</button>
+          <button type="button" class="tab-button" data-tab="performance-tab">Performance</button>
+          <button type="button" class="tab-button" data-tab="reports-tab">Reports</button>
+        </div>
+
+        <div class="tab-panel active" id="overview-tab">
+          <section class="command-strip">
+            <div class="signal-card">
+              <span class="label">Execution</span>
+              <strong>86%</strong>
+              <small>signal confidence</small>
+            </div>
+            <div class="signal-card">
+              <span class="label">Risk mode</span>
+              <strong>Balanced</strong>
+              <small>auto-adjusting</small>
+            </div>
+            <div class="signal-card ring-card">
+              <div class="ring-wrap">
+                <div class="ring">
+                  <span>72%</span>
+                </div>
+              </div>
+              <div>
+                <span class="label">Growth</span>
+                <strong>Momentum</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="stats-overview">
+            <div class="stat-card accent">
+              <span>Total balance</span>
+              <strong>KSh 84,250</strong>
+              <small>+8.4% this month</small>
+            </div>
+            <div class="stat-card">
+              <span>Active bots</span>
+              <strong>07</strong>
+              <small>3 running live</small>
+            </div>
+            <div class="stat-card">
+              <span>Win rate</span>
+              <strong>71.2%</strong>
+              <small>+4.6% vs last week</small>
+            </div>
+            <div class="stat-card">
+              <span>Net profit</span>
+              <strong>KSh 17,430</strong>
+              <small>Updated today</small>
+            </div>
+          </section>
+
+          <section class="dashboard-grid">
+            <div class="panel panel-large">
+              <div class="panel-head">
+                <div>
+                  <span class="mute-label">Performance</span>
+                  <h3>Equity curve</h3>
+                </div>
+                <span class="muted-date" id="dashboardDate">Date</span>
+              </div>
+
+              <div class="line-chart" aria-label="Equity chart">
+                <span style="height: 24%"></span>
+                <span style="height: 30%"></span>
+                <span style="height: 28%"></span>
+                <span style="height: 40%"></span>
+                <span style="height: 52%"></span>
+                <span style="height: 56%"></span>
+                <span style="height: 64%"></span>
+                <span style="height: 80%"></span>
+                <span style="height: 72%"></span>
+                <span style="height: 88%"></span>
+                <span style="height: 92%"></span>
+                <span style="height: 100%"></span>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="mute-label">Market pulse</span>
+                  <h3>Bot status</h3>
+                </div>
+              </div>
+
+              <div class="status-list">
+                <div class="status-item">
+                  <div>
+                    <strong>Digit Precision</strong>
+                    <small>Volatility / digits</small>
+                  </div>
+                  <span class="pill success">Live</span>
+                </div>
+                <div class="status-item">
+                  <div>
+                    <strong>Signature Grind</strong>
+                    <small>Forex & indices</small>
+                  </div>
+                  <span class="pill warning">Watch</span>
+                </div>
+                <div class="status-item">
+                  <div>
+                    <strong>Premium Bundle</strong>
+                    <small>Multi-market</small>
+                  </div>
+                  <span class="pill success">Online</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bottom-grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="mute-label">Recent trades</span>
+                  <h3>Latest activity</h3>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Asset</th>
+                      <th>Type</th>
+                      <th>Result</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Vol 75</td>
+                      <td>CALL</td>
+                      <td class="profit">+KSh 800</td>
+                    </tr>
+                    <tr>
+                      <td>EURUSD</td>
+                      <td>PUT</td>
+                      <td class="loss">-KSh 240</td>
+                    </tr>
+                    <tr>
+                      <td>Boom 500</td>
+                      <td>CALL</td>
+                      <td class="profit">+KSh 1,100</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="mute-label">Insights</span>
+                  <h3>AI notes</h3>
+                </div>
+              </div>
+
+              <ul class="insight-list">
+                <li>Best performing asset this week: Volatility 75.</li>
+                <li>Win rate improved after reducing overtrading during London close.</li>
+                <li>Consider increasing capital allocation on the Premium Bundle.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <div class="tab-panel" id="bots-tab">
+          <section class="panel bot-panel-surface">
+            <div class="panel-head">
+              <div>
+                <span class="mute-label">Strategy center</span>
+                <h3>Bot library</h3>
+              </div>
+            </div>
+            <div class="mini-bot-grid">
+              <article class="mini-bot-card">
+                <span class="chip chip-gold">Digit</span>
+                <h4>Digit Precision</h4>
+                <p>Low-risk pattern engine with structured entry logic.</p>
+              </article>
+              <article class="mini-bot-card featured">
+                <span class="chip chip-silver">Signature</span>
+                <h4>Signature Grind</h4>
+                <p>Balanced strategy built for volatility and trend conditions.</p>
+              </article>
+              <article class="mini-bot-card">
+                <span class="chip chip-dark">Elite</span>
+                <h4>Premium Bundle</h4>
+                <p>Multi-market coverage for ambitious traders and teams.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <div class="tab-panel" id="performance-tab">
+          <section class="panel performance-panel-surface">
+            <div class="panel-head">
+              <div>
+                <span class="mute-label">Performance</span>
+                <h3>Execution analytics</h3>
+              </div>
+            </div>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <span>Sharpe ratio</span>
+                <strong>1.82</strong>
+              </div>
+              <div class="metric-box">
+                <span>Max drawdown</span>
+                <strong>12.4%</strong>
+              </div>
+              <div class="metric-box">
+                <span>Profit factor</span>
+                <strong>2.31</strong>
+              </div>
+              <div class="metric-box">
+                <span>Trades / day</span>
+                <strong>18</strong>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="tab-panel" id="reports-tab">
+          <section class="panel report-panel-surface">
+            <div class="panel-head">
+              <div>
+                <span class="mute-label">Reports</span>
+                <h3>Daily briefing</h3>
+              </div>
+            </div>
+            <ul class="report-list">
+              <li>Volatility conditions remain favorable for the London session.</li>
+              <li>Bot efficiency improved after reducing order overlap.</li>
+              <li>Capital exposure remains within the configured risk band.</li>
+            </ul>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
