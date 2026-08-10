@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================================
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
-  const fmt = (n, decimals = 2) => n.toLocaleString('en-KE', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  const fmt = (n, decimals = 2) => n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
   // ============================================================
   // DATE / TIME
@@ -167,15 +167,15 @@ document.addEventListener('DOMContentLoaded', () => {
       balance: 10000.00,
       sub: 'Practice account — no risk',
       statSub: '+8.4% this month (demo)',
-      pnl: '+KSh 1,430.00',
+      pnl: '+$1,430.00',
       pnlClass: 'up-text',
     },
     real: {
       label: 'Real Balance',
-      balance: 84250.00,
+      balance: 2450.00,
       sub: 'Live account — funds at risk',
-      statSub: '+8.4% this month',
-      pnl: '+KSh 17,430.00',
+      statSub: '+12.8% this month',
+      pnl: '+$342.50',
       pnlClass: 'up-text',
     },
   };
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const balEl = $('#acctBalance');
     const subEl = $('#acctSub');
     if (labelEl) labelEl.textContent = acc.label;
-    if (balEl) balEl.textContent = 'KSh ' + fmt(acc.balance);
+    if (balEl) balEl.textContent = '$' + fmt(acc.balance);
     if (subEl) subEl.textContent = acc.sub;
 
     // Topbar badge
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statBalance = $('#statBalance');
     const statBalanceSub = $('#statBalanceSub');
     const statPnl = $('#statPnl');
-    if (statBalance) statBalance.textContent = 'KSh ' + fmt(acc.balance);
+    if (statBalance) statBalance.textContent = '$' + fmt(acc.balance);
     if (statBalanceSub) statBalanceSub.textContent = acc.statSub;
     if (statPnl) {
       statPnl.textContent = acc.pnl;
@@ -487,8 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pos1Sec > 0) {
       pos1Sec--;
       if (p1) p1.textContent = pos1Sec + 's';
-      const pnl = +(34 + (Math.random() - 0.5) * 5).toFixed(2);
-      if (p1pnl) { p1pnl.textContent = '+KSh ' + fmt(pnl); p1pnl.className = 'position-pnl up-text'; }
+      const pnl = +(18.4 + (Math.random() - 0.5) * 2).toFixed(2);
+      if (p1pnl) { p1pnl.textContent = '+$' + fmt(pnl); p1pnl.className = 'position-pnl up-text'; }
     } else {
       if (p1) p1.textContent = 'Closed';
     }
@@ -496,9 +496,9 @@ document.addEventListener('DOMContentLoaded', () => {
       pos2Sec--;
       const m = Math.floor(pos2Sec / 60), s = pos2Sec % 60;
       if (p2) p2.textContent = m + 'm ' + s + 's';
-      const pnl = +(-12 + (Math.random() - 0.4) * 8).toFixed(2);
+      const pnl = +(-6.2 + (Math.random() - 0.4) * 3).toFixed(2);
       if (p2pnl) {
-        p2pnl.textContent = (pnl >= 0 ? '+' : '') + 'KSh ' + fmt(Math.abs(pnl));
+        p2pnl.textContent = (pnl >= 0 ? '+' : '') + '$' + fmt(Math.abs(pnl));
         p2pnl.className = 'position-pnl ' + (pnl >= 0 ? 'up-text' : 'down-text');
       }
     }
@@ -524,11 +524,11 @@ document.addEventListener('DOMContentLoaded', () => {
   window.exportReport = function () {
     const data = [
       ['Asset', 'Type', 'Stake', 'Result', 'Time'],
-      ['Vol 75', 'CALL', 'KSh 200', '+KSh 184', '14:32'],
-      ['EUR/USD', 'PUT', 'KSh 500', '-KSh 500', '14:18'],
-      ['Boom 500', 'CALL', 'KSh 300', '+KSh 276', '13:55'],
-      ['Vol 100', 'PUT', 'KSh 150', '+KSh 138', '13:41'],
-      ['Crash 500', 'CALL', 'KSh 400', '-KSh 400', '13:20'],
+      ['Vol 75', 'CALL', '$20.00', '+$18.40', '14:32'],
+      ['EUR/USD', 'PUT', '$50.00', '-$50.00', '14:18'],
+      ['Boom 500', 'CALL', '$30.00', '+$27.60', '13:55'],
+      ['Vol 100', 'PUT', '$15.00', '+$13.80', '13:41'],
+      ['Crash 500', 'CALL', '$40.00', '-$40.00', '13:20'],
     ];
     const csv = data.map((r) => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
