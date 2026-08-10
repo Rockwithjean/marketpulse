@@ -31,11 +31,42 @@
       </nav>
 
       <div class="nav-cta">
-        <a href="login.html" class="btn btn-secondary">Log In</a>
-        <a href="signup.html" class="btn btn-primary">Create account</a>
+        <a href="login.html" class="btn btn-secondary nav-login-btn">Log In</a>
+        <a href="signup.html" class="btn btn-primary nav-signup-btn">Create account</a>
       </div>
+
+      <button class="mobile-site-toggle" id="siteNavToggle" aria-label="Open mobile menu">
+        <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+          <rect y="3" width="20" height="2" rx="1" fill="currentColor" />
+          <rect y="9" width="20" height="2" rx="1" fill="currentColor" />
+          <rect y="15" width="20" height="2" rx="1" fill="currentColor" />
+        </svg>
+      </button>
     </div>
   </header>
+
+  <!-- MOBILE SITE DRAWER -->
+  <div class="site-nav-overlay" id="siteNavOverlay"></div>
+  <div class="site-nav-drawer" id="siteNavDrawer">
+    <div class="drawer-header">
+      <a href="#top" class="brand">
+        <span class="brand-mark">MP</span>
+        <span class="brand-text">MarketPulse</span>
+      </a>
+      <button class="drawer-close" id="siteNavClose" aria-label="Close menu">&times;</button>
+    </div>
+    <div class="drawer-actions">
+      <a href="login.html" class="btn btn-secondary full">Log In</a>
+      <a href="signup.html" class="btn btn-primary full">Create Account</a>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#bots" class="drawer-link">Bots</a>
+      <a href="#process" class="drawer-link">How It Works</a>
+      <a href="#results" class="drawer-link">Results</a>
+      <a href="#pricing" class="drawer-link">Pricing</a>
+      <a href="dashboard.html" class="drawer-link">Live Dashboard</a>
+    </nav>
+  </div>
 
   <main id="top">
     <section class="hero">

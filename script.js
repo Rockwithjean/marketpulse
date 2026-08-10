@@ -23,7 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      window.location.href = 'dashboard.html';
+      const btn = loginForm.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+      }
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 350);
     });
   }
 
@@ -31,7 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupForm) {
     signupForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      window.location.href = 'dashboard.html';
+      const btn = signupForm.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+      }
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 350);
     });
   }
 
@@ -48,6 +62,40 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // ============================================================
+  // LANDING PAGE MOBILE SITE DRAWER
+  // ============================================================
+  const siteNavToggle = $('#siteNavToggle');
+  const siteNavClose = $('#siteNavClose');
+  const siteNavDrawer = $('#siteNavDrawer');
+  const siteNavOverlay = $('#siteNavOverlay');
+
+  function toggleSiteNav(show) {
+    if (!siteNavDrawer) return;
+    const open = show !== undefined ? show : !siteNavDrawer.classList.contains('open');
+    siteNavDrawer.classList.toggle('open', open);
+    if (siteNavOverlay) siteNavOverlay.classList.toggle('active', open);
+  }
+
+  if (siteNavToggle) {
+    siteNavToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSiteNav();
+    });
+  }
+
+  if (siteNavClose) {
+    siteNavClose.addEventListener('click', () => toggleSiteNav(false));
+  }
+
+  if (siteNavOverlay) {
+    siteNavOverlay.addEventListener('click', () => toggleSiteNav(false));
+  }
+
+  $$('.drawer-link').forEach((link) => {
+    link.addEventListener('click', () => toggleSiteNav(false));
+  });
 
   // ============================================================
   // MOBILE SIDEBAR & OVERLAY
