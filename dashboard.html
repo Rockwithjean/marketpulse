@@ -303,6 +303,105 @@
               </div>
             </div>
             <div id="liveChart" class="live-chart-container"></div>
+
+            <!-- ===== TRADING PANEL ===== -->
+            <div class="trading-panel" id="tradingPanel">
+
+              <!-- Contract Type Tabs -->
+              <div class="trade-type-tabs">
+                <button class="trade-type-tab active" data-trade-type="rise-fall">Rise / Fall</button>
+                <button class="trade-type-tab" data-trade-type="digits">Higher / Lower</button>
+                <button class="trade-type-tab" data-trade-type="touch">Touch / No Touch</button>
+              </div>
+
+              <div class="trade-body">
+                <!-- Left: Stake + Duration -->
+                <div class="trade-left">
+
+                  <div class="trade-field-group">
+                    <label class="trade-label">Stake</label>
+                    <div class="stake-input-wrap">
+                      <span class="stake-currency">$</span>
+                      <input type="number" id="stakeInput" class="stake-input" value="10" min="1" max="10000" step="1" />
+                    </div>
+                    <div class="stake-presets">
+                      <button class="stake-chip" data-amount="5">$5</button>
+                      <button class="stake-chip" data-amount="10">$10</button>
+                      <button class="stake-chip active" data-amount="20">$20</button>
+                      <button class="stake-chip" data-amount="50">$50</button>
+                    </div>
+                  </div>
+
+                  <div class="trade-field-group">
+                    <label class="trade-label">Duration</label>
+                    <div class="trade-duration-group">
+                      <button class="duration-btn" data-seconds="60">1m</button>
+                      <button class="duration-btn active" data-seconds="120">2m</button>
+                      <button class="duration-btn" data-seconds="300">5m</button>
+                      <button class="duration-btn" data-seconds="900">15m</button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Right: Payout + Buttons -->
+                <div class="trade-right">
+                  <div class="trade-payout-bar">
+                    <div class="payout-item">
+                      <span class="payout-lbl">Payout</span>
+                      <strong class="payout-val up-text" id="payoutDisplay">+$18.40</strong>
+                    </div>
+                    <div class="payout-item">
+                      <span class="payout-lbl">Payout %</span>
+                      <strong class="payout-pct" id="payoutPct">92%</strong>
+                    </div>
+                    <div class="payout-item">
+                      <span class="payout-lbl">Balance</span>
+                      <strong class="payout-balance" id="tradePanelBalance">$10,000.00</strong>
+                    </div>
+                  </div>
+
+                  <div class="trade-direction-btns">
+                    <button class="trade-btn call-btn" id="callBtn" onclick="placeTrade('CALL')">
+                      <span class="trade-btn-arrow">▲</span>
+                      <span class="trade-btn-label">CALL</span>
+                      <span class="trade-btn-sub">Price will rise</span>
+                    </button>
+                    <button class="trade-btn put-btn" id="putBtn" onclick="placeTrade('PUT')">
+                      <span class="trade-btn-arrow">▼</span>
+                      <span class="trade-btn-label">PUT</span>
+                      <span class="trade-btn-sub">Price will fall</span>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Active Trade Progress Bar -->
+              <div class="active-trade-bar" id="activeTradeBar" style="display:none;">
+                <div class="active-trade-info">
+                  <span class="active-trade-icon" id="activeTradeIcon">▲</span>
+                  <span class="active-trade-direction" id="activeTradeDirection">CALL</span>
+                  <span class="active-trade-sym" id="activeTradeSym">VOL 75</span>
+                  <span class="active-trade-stake" id="activeTradeStake">$20.00</span>
+                </div>
+                <div class="active-trade-timer-wrap">
+                  <span class="active-trade-timer" id="activeTradeTimer">2:00</span>
+                  <div class="active-trade-progress">
+                    <div class="active-trade-fill" id="activeTradeProgressFill"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trade Result Toast -->
+            <div class="trade-toast" id="tradeToast">
+              <div class="trade-toast-icon" id="tradeToastIcon">✓</div>
+              <div class="trade-toast-body">
+                <strong id="tradeToastTitle">Trade Won!</strong>
+                <span id="tradeToastMsg">+$18.40 profit</span>
+              </div>
+            </div>
           </div>
 
           <!-- RIGHT PANEL -->

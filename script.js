@@ -227,6 +227,258 @@ document.addEventListener('DOMContentLoaded', () => {
   switchAccount('demo'); // default
 
   // ============================================================
+  // TRADING PANEL INTERACTIONS
+  // ============================================================
+
+  // Payout rate constant
+  const PAYOUT_RATE = 0.92;
+
+  function updatePayoutDisplay() {
+    const stakeEl = $('#stakeInput');
+    if (!stakeEl) return;
+    const stake = parseFloat(stakeEl.value) || 0;
+    const payout = +(stake * PAYOUT_RATE).toFixed(2);
+    const payoutEl = $('#payoutDisplay');
+    const pctEl = $('#payoutPct');
+    const balEl = $('#tradePanelBalance');
+
+    if (payoutEl) payoutEl.textContent = '+$' + fmt(payout);
+    if (pctEl) pctEl.textContent = (PAYOUT_RATE * 100).toFixed(0) + '%';
+
+    const acc = accounts[currentAccount];
+    if (balEl) balEl.textContent = '$' + fmt(acc.balance);
+  }
+
+  // Keep trading panel balance in sync with account switcher
+  function syncTradePanelBalance() {
+    const el = $('#tradePanelBalance');
+    if (el) {
+      const acc = accounts[currentAccount];
+      el.textContent = '$' + fmt(acc.balance);
+    }
+  }
+
+  // Patch switchAccount to also sync trading panel balance
+  const _origSwitch = switchAccount;
+  window.switchAccount = function(type) {
+    _origSwitch(type);
+    syncTradePanelBalance();
+    updatePayoutDisplay();
+  };
+
+  // Contract type tabs
+  $$('.trade-type-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      $$('.trade-type-tab').forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Stake preset chips
+  $$('.stake-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      $$('.stake-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      const stakeInput = $('#stakeInput');
+      if (stakeInput) {
+        stakeInput.value = chip.dataset.amount;
+        updatePayoutDisplay();
+      }
+    });
+  });
+
+  // Stake input manual change
+  const stakeInput = $('#stakeInput');
+  if (stakeInput) {
+    stakeInput.addEventListener('input', () => {
+      $$('.stake-chip').forEach((c) => c.classList.remove('active'));
+      updatePayoutDisplay();
+    });
+  }
+
+  // Duration buttons
+  $$('.duration-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      $$('.duration-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ============================================================
+  // TRADE EXECUTION ENGINE
+  // ============================================================
+  let tradeActive = false;
+  let tradeCountdownInterval = null;
+  let toastTimeout = null;
+
+  // Expose placeTrade globally so onclick="placeTrade(...)" works
+  window.placeTrade = function placeTrade(direction) {
+    if (tradeActive) return;
+
+    const stakeEl = $('#stakeInput');
+    const stake = parseFloat(stakeEl ? stakeEl.value : 10) || 10;
+
+    if (stake <= 0 || stake > 10000) {
+      showToast('Invalid Stake', 'Enter a stake between $1 and $10,000', 'loss');
+      return;
+    }
+
+    const acc = accounts[currentAccount];
+    if (stake > acc.balance) {
+      showToast('Insufficient Balance', 'Your balance is too low for this stake', 'loss');
+      return;
+    }
+
+    // Get duration
+    const activeBtn = document.querySelector('.duration-btn.active');
+    const durationSec = activeBtn ? parseInt(activeBtn.dataset.seconds, 10) : 120;
+
+    // Get symbol label
+    const symEl = $('#chartSymbol');
+    const symLabel = symEl ? symEl.options[symEl.selectedIndex].text : 'VOL 75';
+
+    // Deduct stake from balance
+    acc.balance = +(acc.balance - stake).toFixed(2);
+    window.switchAccount(currentAccount); // refresh UI
+
+    // Record entry price
+    const entryCandle = currentCandles[currentCandles.length - 1];
+    const entryPrice = entryCandle ? entryCandle.close : 0;
+
+    // Lock buttons
+    tradeActive = true;
+    const callBtn = $('#callBtn');
+    const putBtn = $('#putBtn');
+    if (callBtn) callBtn.disabled = true;
+    if (putBtn) putBtn.disabled = true;
+
+    // Show active trade bar
+    const tradeBar = $('#activeTradeBar');
+    const iconEl = $('#activeTradeIcon');
+    const dirEl = $('#activeTradeDirection');
+    const symLblEl = $('#activeTradeSym');
+    const stakeEl2 = $('#activeTradeStake');
+    const timerEl = $('#activeTradeTimer');
+    const fillEl = $('#activeTradeProgressFill');
+
+    if (iconEl) { iconEl.textContent = direction === 'CALL' ? '▲' : '▼'; iconEl.className = 'active-trade-icon ' + direction.toLowerCase(); }
+    if (dirEl) dirEl.textContent = direction;
+    if (symLblEl) symLblEl.textContent = symLabel;
+    if (stakeEl2) stakeEl2.textContent = '$' + fmt(stake);
+    if (fillEl) fillEl.style.width = '100%';
+    if (tradeBar) tradeBar.style.display = 'flex';
+
+    let remaining = durationSec;
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m + ':' + String(sec).padStart(2, '0');
+    }
+
+    if (timerEl) timerEl.textContent = formatTime(remaining);
+
+    tradeCountdownInterval = setInterval(() => {
+      remaining--;
+      const pct = (remaining / durationSec) * 100;
+      if (timerEl) timerEl.textContent = formatTime(Math.max(0, remaining));
+      if (fillEl) fillEl.style.width = pct + '%';
+
+      if (remaining <= 0) {
+        clearInterval(tradeCountdownInterval);
+        settleTrade(direction, stake, entryPrice, symLabel);
+      }
+    }, 1000);
+  };
+
+  function settleTrade(direction, stake, entryPrice, symLabel) {
+    // Determine win/loss: compare exit price vs entry price to direction
+    const exitCandle = currentCandles[currentCandles.length - 1];
+    const exitPrice = exitCandle ? exitCandle.close : entryPrice;
+    const priceWentUp = exitPrice >= entryPrice;
+    const won = (direction === 'CALL' && priceWentUp) || (direction === 'PUT' && !priceWentUp);
+
+    const stake_num = stake;
+    const payout = +(stake_num * PAYOUT_RATE).toFixed(2);
+    const acc = accounts[currentAccount];
+
+    if (won) {
+      acc.balance = +(acc.balance + stake_num + payout).toFixed(2);
+    }
+
+    // Update account UI
+    window.switchAccount(currentAccount);
+
+    // Show toast
+    if (won) {
+      showToast('Trade Won! 🎉', '+$' + fmt(payout) + ' profit credited', 'win');
+    } else {
+      showToast('Trade Lost', '-$' + fmt(stake_num) + ' stake lost', 'loss');
+    }
+
+    // Add to recent trades table
+    addTradeRow(symLabel, direction, stake_num, won ? payout : -stake_num);
+
+    // Hide active trade bar & unlock buttons
+    const tradeBar = $('#activeTradeBar');
+    if (tradeBar) tradeBar.style.display = 'none';
+
+    const callBtn = $('#callBtn');
+    const putBtn = $('#putBtn');
+    if (callBtn) callBtn.disabled = false;
+    if (putBtn) putBtn.disabled = false;
+
+    tradeActive = false;
+  }
+
+  function addTradeRow(sym, direction, stake, result) {
+    const tbody = document.querySelector('.table-wrap table tbody');
+    if (!tbody) return;
+
+    const now = new Date();
+    const timeStr = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+    const isWin = result > 0;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${sym}</strong></td>
+      <td><span class="trade-type ${direction.toLowerCase()}">${direction}</span></td>
+      <td>$${fmt(stake)}</td>
+      <td class="${isWin ? 'profit' : 'loss'}">${isWin ? '+' : ''}$${fmt(Math.abs(result))}</td>
+      <td class="muted-text">${timeStr}</td>
+    `;
+    tr.style.animation = 'fadeSlideDown 0.4s ease';
+    tbody.insertBefore(tr, tbody.firstChild);
+
+    // Keep last 10 rows
+    while (tbody.children.length > 10) tbody.removeChild(tbody.lastChild);
+  }
+
+  function showToast(title, msg, type) {
+    const toast = $('#tradeToast');
+    if (!toast) return;
+    const titleEl = $('#tradeToastTitle');
+    const msgEl = $('#tradeToastMsg');
+    const iconEl = $('#tradeToastIcon');
+
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = msg;
+    if (iconEl) iconEl.textContent = type === 'win' ? '✓' : '✕';
+
+    toast.className = 'trade-toast ' + type + ' show';
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  }
+
+  // Init payout display
+  updatePayoutDisplay();
+  syncTradePanelBalance();
+
+
+  // ============================================================
   // LIVE CHART (lightweight-charts)
   // ============================================================
   const chartContainer = $('#liveChart');
