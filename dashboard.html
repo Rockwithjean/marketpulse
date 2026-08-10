@@ -504,6 +504,54 @@
                 </div>
               </div>
             </div>
+
+            <!-- Identity Verification Panel -->
+            <div class="panel kyc-panel" style="margin-top:16px;">
+              <div class="panel-head">
+                <div>
+                  <span class="mute-label">Compliance</span>
+                  <h3>Identity Verification</h3>
+                </div>
+                <span class="pill warning" id="kycStatusBadge">Unverified</span>
+              </div>
+              <div class="kyc-body">
+                <div class="kyc-field">
+                  <span class="kyc-label">National ID / Passport #</span>
+                  <div class="kyc-id-display">
+                    <strong id="displayIdNumber">38492011</strong>
+                    <button class="btn-text-edit" id="editIdBtn">Edit</button>
+                  </div>
+                  <input type="text" id="editIdInput" class="kyc-id-input" style="display:none;" value="38492011" />
+                </div>
+
+                <div class="kyc-upload-section">
+                  <span class="kyc-label">Upload ID Document (Front & Back)</span>
+                  <div class="kyc-dropzone" id="kycDropzone">
+                    <input type="file" id="kycFileInput" accept="image/*,.pdf" hidden />
+                    <div class="kyc-dropzone-content" id="kycDropContent">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                      </svg>
+                      <p><strong>Click to upload ID photo</strong> or drag &amp; drop</p>
+                      <small>JPEG, PNG, WEBP (Max 10MB)</small>
+                    </div>
+                    <div class="kyc-preview-wrap" id="kycPreviewWrap" style="display:none;">
+                      <img id="kycImagePreview" src="" alt="ID Preview" />
+                      <button type="button" class="kyc-remove-btn" id="kycRemoveBtn" title="Remove photo">✕</button>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-primary small-btn kyc-submit-btn" id="kycSubmitBtn">
+                  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Submit ID for Verification
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 

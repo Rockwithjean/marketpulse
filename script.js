@@ -20,9 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // AUTH FORMS
   // ============================================================
   const loginForm = $('#loginForm');
+  const loginIdInput = $('#loginIdInput');
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      const idValue = loginIdInput ? loginIdInput.value.trim() : '';
+      if (!idValue) {
+        alert('Please enter your ID number before signing in.');
+        if (loginIdInput) loginIdInput.focus();
+        return;
+      }
+
+      localStorage.setItem('marketpulseUserId', idValue);
+      localStorage.setItem('marketpulseKycVerified', 'false');
+
       const btn = loginForm.querySelector('button[type="submit"]');
       if (btn) {
         btn.disabled = true;
@@ -62,6 +73,158 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  let storedUserId = localStorage.getItem('marketpulseUserId') || '';
+  const storedKycFileName = localStorage.getItem('marketpulseKycFileName') || '';
+  const kycState = {
+    fileName: storedKycFileName,
+    verified: localStorage.getItem('marketpulseKycVerified') === 'true',
+  };
+
+  const idDisplayEl = $('#displayIdNumber');
+  const idEditBtn = $('#editIdBtn');
+  const idEditInput = $('#editIdInput');
+  const kycDropzone = $('#kycDropzone');
+  const kycFileInput = $('#kycFileInput');
+  const kycDropContent = $('#kycDropContent');
+  const kycPreviewWrap = $('#kycPreviewWrap');
+  const kycImagePreview = $('#kycImagePreview');
+  const kycRemoveBtn = $('#kycRemoveBtn');
+  const kycStatusBadge = $('#kycStatusBadge');
+  const kycSubmitBtn = $('#kycSubmitBtn');
+  const defaultDropContent = kycDropContent ? kycDropContent.innerHTML : '';
+
+  function updateKycDisplay() {
+    storedUserId = localStorage.getItem('marketpulseUserId') || '';
+    if (idDisplayEl) {
+      idDisplayEl.textContent = storedUserId || 'Not provided';
+    }
+    if (idEditInput) {
+      idEditInput.value = storedUserId;
+    }
+    if (kycStatusBadge) {
+      kycStatusBadge.textContent = kycState.verified ? 'Verified' : 'Unverified';
+      kycStatusBadge.className = 'pill ' + (kycState.verified ? 'success' : 'warning');
+    }
+    if (kycState.fileName && kycDropContent) {
+      kycDropContent.innerHTML = `<p><strong>Selected:</strong> ${kycState.fileName}</p><small>Click to replace or remove</small>`;
+    } else if (kycDropContent) {
+      kycDropContent.innerHTML = defaultDropContent;
+    }
+    if (kycPreviewWrap) {
+      kycPreviewWrap.style.display = 'none';
+    }
+  }
+
+  function resetDropzone() {
+    if (kycDropContent) kycDropContent.innerHTML = defaultDropContent;
+    if (kycPreviewWrap) kycPreviewWrap.style.display = 'none';
+    if (kycImagePreview) kycImagePreview.src = '';
+    kycState.fileName = '';
+    localStorage.removeItem('marketpulseKycFileName');
+  }
+
+  function handleKycFile(file) {
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File must be 10MB or smaller.');
+      return;
+    }
+
+    kycState.fileName = file.name;
+    localStorage.setItem('marketpulseKycFileName', file.name);
+    kycState.verified = false;
+    localStorage.setItem('marketpulseKycVerified', 'false');
+    updateKycDisplay();
+
+    if (kycDropContent) {
+      kycDropContent.innerHTML = `<p><strong>Selected:</strong> ${file.name}</p><small>Click to replace or remove</small>`;
+    }
+
+    if (file.type.startsWith('image/') && kycImagePreview && kycPreviewWrap) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        kycImagePreview.src = reader.result;
+        kycPreviewWrap.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else if (kycPreviewWrap) {
+      kycPreviewWrap.style.display = 'none';
+    }
+  }
+
+  if (idEditBtn && idEditInput) {
+    idEditBtn.addEventListener('click', () => {
+      idEditInput.style.display = 'block';
+      idEditInput.focus();
+    });
+  }
+
+  if (idEditInput) {
+    idEditInput.addEventListener('change', () => {
+      const value = idEditInput.value.trim();
+      localStorage.setItem('marketpulseUserId', value);
+      storedUserId = value;
+      if (idDisplayEl) idDisplayEl.textContent = value || 'Not provided';
+    });
+  }
+
+  if (kycDropzone && kycFileInput) {
+    kycDropzone.addEventListener('click', () => kycFileInput.click());
+    kycDropzone.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      kycDropzone.classList.add('dragover');
+    });
+    kycDropzone.addEventListener('dragleave', () => {
+      kycDropzone.classList.remove('dragover');
+    });
+    kycDropzone.addEventListener('drop', (event) => {
+      event.preventDefault();
+      kycDropzone.classList.remove('dragover');
+      const file = event.dataTransfer.files[0];
+      handleKycFile(file);
+    });
+  }
+
+  if (kycFileInput) {
+    kycFileInput.addEventListener('change', () => {
+      const file = kycFileInput.files[0];
+      handleKycFile(file);
+    });
+  }
+
+  if (kycRemoveBtn) {
+    kycRemoveBtn.addEventListener('click', () => {
+      resetDropzone();
+      kycState.verified = false;
+      localStorage.setItem('marketpulseKycVerified', 'false');
+      updateKycDisplay();
+    });
+  }
+
+  if (kycSubmitBtn) {
+    kycSubmitBtn.addEventListener('click', () => {
+      if (!kycState.fileName) {
+        alert('Upload your ID photo or document before submitting for verification.');
+        return;
+      }
+      kycSubmitBtn.disabled = true;
+      const originalText = kycSubmitBtn.textContent;
+      kycSubmitBtn.textContent = 'Submitting...';
+      setTimeout(() => {
+        kycState.verified = true;
+        localStorage.setItem('marketpulseKycVerified', 'true');
+        updateKycDisplay();
+        kycSubmitBtn.textContent = 'Verified';
+        setTimeout(() => {
+          kycSubmitBtn.textContent = originalText;
+          kycSubmitBtn.disabled = false;
+        }, 1200);
+      }, 900);
+    });
+  }
+
+  updateKycDisplay();
 
   // ============================================================
   // LANDING PAGE MOBILE SITE DRAWER
@@ -482,7 +645,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // LIVE CHART (lightweight-charts)
   // ============================================================
   const chartContainer = $('#liveChart');
-  let chart, candleSeries, priceUpdateInterval;
+  let chart, candleSeries, priceUpdateInterval, perfChart;
+
+  function resizeCharts() {
+    if (chart && chartContainer) {
+      const width = Math.max(chartContainer.clientWidth, 360);
+      chart.applyOptions({ width });
+    }
+    if (perfChart) {
+      const perfContainer = $('#perfChart');
+      if (perfContainer) {
+        perfChart.applyOptions({ width: Math.max(perfContainer.clientWidth, 360) });
+      }
+    }
+  }
+  window.addEventListener('resize', resizeCharts);
+  window.addEventListener('load', () => {
+    resizeCharts();
+    if (chart) chart.timeScale().fitContent();
+    if (perfChart) perfChart.timeScale().fitContent();
+  });
 
   function generateCandles(basePrice, count) {
     const candles = [];
@@ -515,10 +697,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isDark = true;
     chart = LightweightCharts.createChart(chartContainer, {
-      width: chartContainer.clientWidth,
+      width: Math.max(chartContainer.clientWidth, 360),
       height: 320,
       layout: {
-        background: { color: 'transparent' },
+        background: { color: '#07131d' },
         textColor: 'rgba(200,210,220,0.8)',
         fontFamily: 'Inter, sans-serif',
         fontSize: 11,
@@ -659,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const perfContainer = $('#perfChart');
     if (!perfContainer || typeof LightweightCharts === 'undefined') return;
 
-    const perfChart = LightweightCharts.createChart(perfContainer, {
+    perfChart = LightweightCharts.createChart(perfContainer, {
       width: perfContainer.clientWidth,
       height: 240,
       layout: { background: { color: 'transparent' }, textColor: 'rgba(200,210,220,0.7)', fontFamily: 'Inter', fontSize: 11 },
@@ -686,7 +868,9 @@ document.addEventListener('DOMContentLoaded', () => {
     lineSeries.setData(perfData);
     perfChart.timeScale().fitContent();
 
-    const ro = new ResizeObserver(() => { perfChart.applyOptions({ width: perfContainer.clientWidth }); });
+    const ro = new ResizeObserver(() => {
+      perfChart.applyOptions({ width: perfContainer.clientWidth });
+    });
     ro.observe(perfContainer);
   }
 
