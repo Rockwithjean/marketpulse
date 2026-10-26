@@ -21,12 +21,18 @@
                 <rect y="15" width="20" height="2" rx="1" fill="currentColor" />
             </svg>
         </button>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <div class="brand sidebar-brand">
-                <span class="brand-mark">MP</span>
-                <span class="brand-text">MarketPulse</span>
+                <span class="brand-mark">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 14.5L7.5 9.5L12 14L16.5 6.5L21 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="16.5" cy="6.5" r="2.2" fill="currentColor"/>
+                    </svg>
+                </span>
+                <span class="brand-text">Market<span class="brand-accent">Pulse</span></span>
             </div>
 
             <nav class="sidebar-nav" aria-label="Sidebar navigation">
@@ -46,14 +52,12 @@
                     </svg>
                     Markets
                 </a>
-                <a href="dashboard.html#bots-tab" class="nav-item">
+                <a href="dashboard.html#performance-tab" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
-                        <rect x="3" y="6" width="14" height="10" rx="3" stroke="currentColor" stroke-width="1.5" />
-                        <path d="M7 6V4a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" />
-                        <circle cx="7.5" cy="11" r="1" fill="currentColor" />
-                        <circle cx="12.5" cy="11" r="1" fill="currentColor" />
+                        <path d="M2 16l4-6 4 2 4-8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
-                    Bots
+                    Performance
                 </a>
                 <a href="deposit.html" class="nav-item active">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
@@ -61,6 +65,13 @@
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     Deposit
+                </a>
+                <a href="withdraw.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 18V7m0 0L5 12m5-5l5 5M3 3h14" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Withdraw
                 </a>
                 <a href="settings.html" class="nav-item">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
@@ -160,6 +171,12 @@
                                     <strong>M-Pesa</strong>
                                     <small>Instant · Free</small>
                                 </div>
+                                <a class="method-card" href="paybill.html" style="color:inherit;text-decoration:none;">
+                                    <div class="method-icon" style="background:rgba(0,168,89,0.14);font-size:1.5rem;">📲
+                                    </div>
+                                    <strong>Paybill</strong>
+                                    <small>Pay with M-Pesa</small>
+                                </a>
                                 <div class="method-card" data-method="card">
                                     <div class="method-icon" style="background:rgba(76,188,255,0.12);font-size:1.5rem;">
                                         💳</div>

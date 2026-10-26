@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarketPulse | Paybill Instructions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .paybill-content {
+            max-width: 760px;
+        }
+
+        .paybill-shell {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .paybill-header {
+            margin-bottom: 26px;
+        }
+
+        .paybill-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(232, 237, 242, 0.68);
+            text-decoration: none;
+            font-size: 0.86rem;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .paybill-back:hover {
+            color: var(--gold-soft);
+        }
+
+        .paybill-card {
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .paybill-hero {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 28px;
+            background: linear-gradient(120deg, rgba(0, 168, 89, 0.16), rgba(0, 168, 89, 0.025));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .paybill-icon {
+            display: grid;
+            width: 58px;
+            height: 58px;
+            flex: 0 0 58px;
+            place-items: center;
+            border: 1px solid rgba(40, 201, 141, 0.24);
+            border-radius: 18px;
+            background: rgba(40, 201, 141, 0.12);
+            color: #7ef0bf;
+            font-size: 1.7rem;
+        }
+
+        .paybill-hero h2 {
+            margin: 0 0 6px;
+            font-size: 1.25rem;
+            letter-spacing: -0.025em;
+        }
+
+        .paybill-hero p,
+        .paybill-details p {
+            margin: 0;
+            color: rgba(232, 237, 242, 0.62);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .paybill-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            padding: 24px 28px;
+        }
+
+        .paybill-detail {
+            min-width: 0;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .paybill-detail span {
+            display: block;
+            margin-bottom: 9px;
+            color: rgba(232, 237, 242, 0.56);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.045em;
+            text-transform: uppercase;
+        }
+
+        .paybill-detail strong {
+            display: block;
+            color: var(--gold-soft);
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+            font-weight: 800;
+            letter-spacing: 0.025em;
+            overflow-wrap: anywhere;
+        }
+
+        .paybill-steps {
+            margin: 0 28px;
+            padding: 22px 0 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .paybill-steps h3 {
+            margin: 0 0 18px;
+            font-size: 1rem;
+        }
+
+        .paybill-steps ol {
+            display: grid;
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            counter-reset: paybill-step;
+        }
+
+        .paybill-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: rgba(232, 237, 242, 0.72);
+            font-size: 0.87rem;
+            line-height: 1.55;
+            counter-increment: paybill-step;
+        }
+
+        .paybill-steps li::before {
+            display: grid;
+            width: 26px;
+            height: 26px;
+            flex: 0 0 26px;
+            place-items: center;
+            border: 1px solid rgba(212, 164, 71, 0.24);
+            border-radius: 50%;
+            background: rgba(212, 164, 71, 0.09);
+            color: var(--gold-soft);
+            content: counter(paybill-step);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .paybill-steps strong {
+            color: rgba(255, 255, 255, 0.94);
+        }
+
+        .paybill-note {
+            margin: 20px 28px 0;
+        }
+
+        .paybill-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 22px 28px 28px;
+        }
+
+        @media (max-width: 560px) {
+            .paybill-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .paybill-hero {
+                align-items: flex-start;
+                padding: 22px 18px;
+            }
+
+            .paybill-icon {
+                width: 48px;
+                height: 48px;
+                flex-basis: 48px;
+                border-radius: 15px;
+            }
+
+            .paybill-details {
+                grid-template-columns: 1fr;
+                padding: 18px;
+            }
+
+            .paybill-steps {
+                margin: 0 18px;
+            }
+
+            .paybill-note {
+                margin-right: 18px;
+                margin-left: 18px;
+            }
+
+            .paybill-footer {
+                padding: 20px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+    <div class="dashboard-shell paybill-shell">
+        <main class="dashboard-main">
+            <div class="deposit-shell paybill-content">
+                <div class="deposit-header paybill-header">
+                    <div>
+                        <p class="eyebrow accent">Deposit · M-Pesa</p>
+                        <h1>Pay with Paybill</h1>
+                    </div>
+                    <a href="deposit.html" class="paybill-back">
+                        <span aria-hidden="true">←</span>
+                        Back to deposit
+                    </a>
+                </div>
+
+                <section class="deposit-panel paybill-card" aria-label="Paybill payment details">
+                    <div class="paybill-hero">
+                        <div class="paybill-icon" aria-hidden="true">M</div>
+                        <div>
+                            <h2>M-Pesa Paybill</h2>
+                            <p>Use the details below to make your deposit securely.</p>
+                        </div>
+                    </div>
+
+                    <div class="paybill-details">
+                        <div class="paybill-detail">
+                            <span>Business number</span>
+                            <strong>522522</strong>
+                        </div>
+                        <div class="paybill-detail">
+                            <span>Account number</span>
+                            <strong>1355496063</strong>
+                        </div>
+                    </div>
+
+                    <div class="paybill-steps">
+                        <h3>How to pay</h3>
+                        <ol>
+                            <li>Open <strong>M-PESA</strong> on your phone.</li>
+                            <li>Select <strong>Lipa na M-PESA</strong>, then choose <strong>Pay Bill</strong>.</li>
+                            <li>Enter <strong>522522</strong> as the business number and <strong>1355496063</strong> as the account number.</li>
+                            <li>Enter your deposit amount, confirm the details, and complete the payment with your M-PESA PIN.</li>
+                        </ol>
+                    </div>
+
+                    <div class="deposit-security-note paybill-note">
+                        Check the business and account numbers before confirming your payment.
+                    </div>
+
+                    <div class="paybill-footer">
+                        <a href="deposit.html" class="btn btn-primary">Return to Deposit</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

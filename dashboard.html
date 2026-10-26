@@ -28,8 +28,13 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="brand sidebar-brand">
-        <span class="brand-mark">MP</span>
-        <span class="brand-text">MarketPulse</span>
+        <span class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 14.5L7.5 9.5L12 14L16.5 6.5L21 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="16.5" cy="6.5" r="2.2" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="brand-text">Market<span class="brand-accent">Pulse</span></span>
       </div>
 
       <nav class="sidebar-nav" aria-label="Sidebar navigation">
@@ -49,15 +54,7 @@
           </svg>
           Markets
         </a>
-        <a href="#" class="nav-item" data-target="bots-tab">
-          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="6" width="14" height="10" rx="3" stroke="currentColor" stroke-width="1.5" />
-            <path d="M7 6V4a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" />
-            <circle cx="7.5" cy="11" r="1" fill="currentColor" />
-            <circle cx="12.5" cy="11" r="1" fill="currentColor" />
-          </svg>
-          Bots
-        </a>
+
         <a href="#" class="nav-item" data-target="performance-tab">
           <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
             <path d="M2 16l4-6 4 2 4-8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -80,6 +77,13 @@
           </svg>
           Deposit
         </a>
+        <a href="withdraw.html" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M10 18V7m0 0L5 12m5-5l5 5M3 3h14" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Withdraw
+        </a>
         <a href="settings.html" class="nav-item">
           <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
             <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5" />
@@ -94,7 +98,7 @@
 
       <!-- Account Switcher -->
       <div class="account-switcher" id="accountSwitcher">
-        <span class="sidebar-section-label">Account type</span>
+        <span class="sidebar-section-label" style="color:rgba(212,164,71,0.7);">Account type</span>
         <div class="account-toggle-group">
           <button class="account-toggle-btn active" data-account="demo" id="demoBtn">
             <span class="acct-dot demo-dot"></span>
@@ -122,10 +126,10 @@
 
       <div class="sidebar-footer">
         <div class="user-pill">
-          <div class="user-avatar">JD</div>
+          <div class="user-avatar" id="userAvatar">MP</div>
           <div class="user-info">
-            <strong>John Doe</strong>
-            <small>john@example.com</small>
+            <strong id="userName">Account holder</strong>
+            <small id="userEmail"></small>
           </div>
         </div>
         <a href="login.html" class="sidebar-logout">
@@ -142,7 +146,6 @@
       <header class="dashboard-topbar">
         <div class="topbar-left">
           <p class="eyebrow accent">Dashboard</p>
-          <h1>Portfolio Overview</h1>
         </div>
 
         <div class="topbar-center">
@@ -187,7 +190,7 @@
       <div class="tab-strip">
         <button type="button" class="tab-button active" data-tab="overview-tab">Overview</button>
         <button type="button" class="tab-button" data-tab="markets-tab">Markets</button>
-        <button type="button" class="tab-button" data-tab="bots-tab">Bots</button>
+
         <button type="button" class="tab-button" data-tab="performance-tab">Performance</button>
         <button type="button" class="tab-button" data-tab="reports-tab">Reports</button>
       </div>
@@ -235,21 +238,7 @@
               <small class="up-text">+4.6% vs last week</small>
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-bots">
-              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
-                <rect x="3" y="6" width="14" height="10" rx="3" stroke="currentColor" stroke-width="1.5" />
-                <path d="M7 6V4a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" />
-                <circle cx="7.5" cy="11" r="1" fill="currentColor" />
-                <circle cx="12.5" cy="11" r="1" fill="currentColor" />
-              </svg>
-            </div>
-            <div>
-              <span>Active Bots</span>
-              <strong>7</strong>
-              <small>3 running live</small>
-            </div>
-          </div>
+
           <div class="stat-card">
             <div class="stat-icon stat-icon-trades">
               <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
@@ -364,12 +353,12 @@
                   <div class="trade-direction-btns">
                     <button class="trade-btn call-btn" id="callBtn" onclick="placeTrade('CALL')">
                       <span class="trade-btn-arrow">▲</span>
-                      <span class="trade-btn-label">CALL</span>
+                      <span class="trade-btn-label">BUY</span>
                       <span class="trade-btn-sub">Price will rise</span>
                     </button>
                     <button class="trade-btn put-btn" id="putBtn" onclick="placeTrade('PUT')">
                       <span class="trade-btn-arrow">▼</span>
-                      <span class="trade-btn-label">PUT</span>
+                      <span class="trade-btn-label">SELL</span>
                       <span class="trade-btn-sub">Price will fall</span>
                     </button>
                   </div>
@@ -381,7 +370,7 @@
               <div class="active-trade-bar" id="activeTradeBar" style="display:none;">
                 <div class="active-trade-info">
                   <span class="active-trade-icon" id="activeTradeIcon">▲</span>
-                  <span class="active-trade-direction" id="activeTradeDirection">CALL</span>
+                  <span class="active-trade-direction" id="activeTradeDirection">BUY</span>
                   <span class="active-trade-sym" id="activeTradeSym">VOL 75</span>
                   <span class="active-trade-stake" id="activeTradeStake">$20.00</span>
                 </div>
@@ -406,66 +395,8 @@
 
           <!-- RIGHT PANEL -->
           <div class="panel-col-right">
-            <!-- Bot Status -->
-            <div class="panel">
-              <div class="panel-head">
-                <div>
-                  <span class="mute-label">Automation</span>
-                  <h3>Bot Status</h3>
-                </div>
-                <button class="btn btn-secondary small-btn"
-                  style="font-size:0.78rem;min-height:34px;padding:0 12px;">Manage</button>
-              </div>
-              <div class="status-list">
-                <div class="status-item">
-                  <div class="bot-status-icon live-icon"></div>
-                  <div class="status-item-content">
-                    <strong>Digit Precision</strong>
-                    <small>Vol 75 · digits</small>
-                  </div>
-                  <div class="status-item-right">
-                    <span class="pill success">Live</span>
-                    <small class="up-text">+$38.00</small>
-                  </div>
-                </div>
-                <div class="status-item">
-                  <div class="bot-status-icon watch-icon"></div>
-                  <div class="status-item-content">
-                    <strong>Signature Grind</strong>
-                    <small>Forex &amp; indices</small>
-                  </div>
-                  <div class="status-item-right">
-                    <span class="pill warning">Watch</span>
-                    <small class="muted-text">-$4.00</small>
-                  </div>
-                </div>
-                <div class="status-item">
-                  <div class="bot-status-icon live-icon"></div>
-                  <div class="status-item-content">
-                    <strong>Premium Bundle</strong>
-                    <small>Multi-market</small>
-                  </div>
-                  <div class="status-item-right">
-                    <span class="pill success">Online</span>
-                    <small class="up-text">+$62.00</small>
-                  </div>
-                </div>
-                <div class="status-item">
-                  <div class="bot-status-icon pause-icon"></div>
-                  <div class="status-item-content">
-                    <strong>Crash Hunter</strong>
-                    <small>Crash 500/1000</small>
-                  </div>
-                  <div class="status-item-right">
-                    <span class="pill muted">Paused</span>
-                    <small class="muted-text">–</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!-- Open Positions -->
-            <div class="panel" style="margin-top:16px;">
+            <div class="panel">
               <div class="panel-head">
                 <div>
                   <span class="mute-label">Real-time</span>
@@ -477,7 +408,7 @@
                 <div class="position-row">
                   <div class="position-asset">
                     <strong>VOL 75</strong>
-                    <small>CALL · 1 min</small>
+                    <small>BUY · 1 min</small>
                   </div>
                   <div class="position-stake">$20.00</div>
                   <div class="position-pnl up-text" id="pos1Pnl">+$18.40</div>
@@ -491,7 +422,7 @@
                 <div class="position-row">
                   <div class="position-asset">
                     <strong>EUR/USD</strong>
-                    <small>PUT · 5 min</small>
+                    <small>SELL · 5 min</small>
                   </div>
                   <div class="position-stake">$50.00</div>
                   <div class="position-pnl down-text" id="pos2Pnl">-$6.20</div>
@@ -505,51 +436,46 @@
               </div>
             </div>
 
-            <!-- Identity Verification Panel -->
-            <div class="panel kyc-panel" style="margin-top:16px;">
+            <!-- Risk Controls -->
+            <div class="panel" style="margin-top:16px;">
               <div class="panel-head">
                 <div>
-                  <span class="mute-label">Compliance</span>
-                  <h3>Identity Verification</h3>
+                  <span class="mute-label">Risk limits</span>
+                  <h3>Account Controls</h3>
                 </div>
-                <span class="pill warning" id="kycStatusBadge">Unverified</span>
+                <span class="pill success">Disciplined</span>
               </div>
-              <div class="kyc-body">
-                <div class="kyc-field">
-                  <span class="kyc-label">National ID / Passport #</span>
-                  <div class="kyc-id-display">
-                    <strong id="displayIdNumber">38492011</strong>
-                    <button class="btn-text-edit" id="editIdBtn">Edit</button>
+              <div class="status-list">
+                <div class="status-item">
+                  <div class="bot-status-icon live-icon"></div>
+                  <div class="status-item-content">
+                    <strong>Daily Loss Guard</strong>
+                    <small>Max limit: $500.00</small>
                   </div>
-                  <input type="text" id="editIdInput" class="kyc-id-input" style="display:none;" value="38492011" />
-                </div>
-
-                <div class="kyc-upload-section">
-                  <span class="kyc-label">Upload ID Document (Front & Back)</span>
-                  <div class="kyc-dropzone" id="kycDropzone">
-                    <input type="file" id="kycFileInput" accept="image/*,.pdf" hidden />
-                    <div class="kyc-dropzone-content" id="kycDropContent">
-                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                      </svg>
-                      <p><strong>Click to upload ID photo</strong> or drag &amp; drop</p>
-                      <small>JPEG, PNG, WEBP (Max 10MB)</small>
-                    </div>
-                    <div class="kyc-preview-wrap" id="kycPreviewWrap" style="display:none;">
-                      <img id="kycImagePreview" src="" alt="ID Preview" />
-                      <button type="button" class="kyc-remove-btn" id="kycRemoveBtn" title="Remove photo">✕</button>
-                    </div>
+                  <div class="status-item-right">
+                    <span class="pill success">$0.00 / $500</span>
                   </div>
                 </div>
-
-                <button type="button" class="btn btn-primary small-btn kyc-submit-btn" id="kycSubmitBtn">
-                  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
-                    <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Submit ID for Verification
-                </button>
+                <div class="status-item">
+                  <div class="bot-status-icon watch-icon"></div>
+                  <div class="status-item-content">
+                    <strong>Max Open Exposure</strong>
+                    <small>Max 5 trades</small>
+                  </div>
+                  <div class="status-item-right">
+                    <span class="pill muted">2 of 5</span>
+                  </div>
+                </div>
+                <div class="status-item">
+                  <div class="bot-status-icon live-icon"></div>
+                  <div class="status-item-content">
+                    <strong>Prop Challenge Target</strong>
+                    <small>Phase 1: $1,000 profit</small>
+                  </div>
+                  <div class="status-item-right">
+                    <span class="pill success">71% reached</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -580,42 +506,42 @@
                 <tbody>
                   <tr>
                     <td><strong>Vol 75</strong></td>
-                    <td><span class="trade-type call">CALL</span></td>
+                    <td><span class="trade-type buy">BUY</span></td>
                     <td>$20.00</td>
                     <td class="profit">+$18.40</td>
                     <td class="muted-text">14:32</td>
                   </tr>
                   <tr>
                     <td><strong>EUR/USD</strong></td>
-                    <td><span class="trade-type put">PUT</span></td>
+                    <td><span class="trade-type sell">SELL</span></td>
                     <td>$50.00</td>
                     <td class="loss">-$50.00</td>
                     <td class="muted-text">14:18</td>
                   </tr>
                   <tr>
                     <td><strong>Boom 500</strong></td>
-                    <td><span class="trade-type call">CALL</span></td>
+                    <td><span class="trade-type buy">BUY</span></td>
                     <td>$30.00</td>
                     <td class="profit">+$27.60</td>
                     <td class="muted-text">13:55</td>
                   </tr>
                   <tr>
                     <td><strong>Vol 100</strong></td>
-                    <td><span class="trade-type put">PUT</span></td>
+                    <td><span class="trade-type sell">SELL</span></td>
                     <td>$15.00</td>
                     <td class="profit">+$13.80</td>
                     <td class="muted-text">13:41</td>
                   </tr>
                   <tr>
                     <td><strong>Crash 500</strong></td>
-                    <td><span class="trade-type call">CALL</span></td>
+                    <td><span class="trade-type buy">BUY</span></td>
                     <td>$40.00</td>
                     <td class="loss">-$40.00</td>
                     <td class="muted-text">13:20</td>
                   </tr>
                   <tr>
                     <td><strong>Vol 75</strong></td>
-                    <td><span class="trade-type call">CALL</span></td>
+                    <td><span class="trade-type buy">BUY</span></td>
                     <td>$20.00</td>
                     <td class="profit">+$18.40</td>
                     <td class="muted-text">13:05</td>
@@ -762,88 +688,7 @@
         </section>
       </div>
 
-      <!-- ===== BOTS TAB ===== -->
-      <div class="tab-panel" id="bots-tab">
-        <section class="panel bot-panel-surface">
-          <div class="panel-head">
-            <div>
-              <span class="mute-label">Strategy center</span>
-              <h3>Bot Library</h3>
-            </div>
-            <button class="btn btn-primary small-btn">+ Deploy Bot</button>
-          </div>
-          <div class="mini-bot-grid">
-            <article class="mini-bot-card">
-              <div class="bot-card-top">
-                <span class="chip chip-gold">Digit</span>
-                <div class="bot-status-badge live">● Running</div>
-              </div>
-              <h4>Digit Precision</h4>
-              <p>Low-risk pattern engine with structured entry logic. Optimized for digit-based volatility markets.</p>
-              <div class="bot-metrics">
-                <div class="bot-metric"><span>Win Rate</span><strong>74%</strong></div>
-                <div class="bot-metric"><span>Trades/Day</span><strong>42</strong></div>
-                <div class="bot-metric"><span>Daily P&L</span><strong class="up-text">+$38.00</strong></div>
-              </div>
-              <div class="bot-card-actions">
-                <button class="btn btn-secondary small-btn">Configure</button>
-                <button class="btn btn-primary small-btn">Stop Bot</button>
-              </div>
-            </article>
-            <article class="mini-bot-card featured">
-              <div class="bot-card-top">
-                <span class="chip chip-silver">Signature</span>
-                <div class="bot-status-badge watch">● Watching</div>
-              </div>
-              <h4>Signature Grind</h4>
-              <p>Balanced strategy built for volatility and trend conditions. Covers Forex and index markets.</p>
-              <div class="bot-metrics">
-                <div class="bot-metric"><span>Win Rate</span><strong>68%</strong></div>
-                <div class="bot-metric"><span>Trades/Day</span><strong>28</strong></div>
-                <div class="bot-metric"><span>Daily P&L</span><strong class="down-text">-$4.00</strong></div>
-              </div>
-              <div class="bot-card-actions">
-                <button class="btn btn-secondary small-btn">Configure</button>
-                <button class="btn btn-primary small-btn">Resume</button>
-              </div>
-            </article>
-            <article class="mini-bot-card">
-              <div class="bot-card-top">
-                <span class="chip chip-dark">Elite</span>
-                <div class="bot-status-badge live">● Online</div>
-              </div>
-              <h4>Premium Bundle</h4>
-              <p>Multi-market coverage for ambitious traders. Runs on volatility, forex and synthetic indices.</p>
-              <div class="bot-metrics">
-                <div class="bot-metric"><span>Win Rate</span><strong>72%</strong></div>
-                <div class="bot-metric"><span>Trades/Day</span><strong>65</strong></div>
-                <div class="bot-metric"><span>Daily P&L</span><strong class="up-text">+$62.00</strong></div>
-              </div>
-              <div class="bot-card-actions">
-                <button class="btn btn-secondary small-btn">Configure</button>
-                <button class="btn btn-primary small-btn">Stop Bot</button>
-              </div>
-            </article>
-            <article class="mini-bot-card paused-bot">
-              <div class="bot-card-top">
-                <span class="chip chip-dark">Crash</span>
-                <div class="bot-status-badge paused">● Paused</div>
-              </div>
-              <h4>Crash Hunter</h4>
-              <p>Specialized Crash 500 &amp; 1000 strategy. Uses spike detection and trend-following logic.</p>
-              <div class="bot-metrics">
-                <div class="bot-metric"><span>Win Rate</span><strong>59%</strong></div>
-                <div class="bot-metric"><span>Trades/Day</span><strong>18</strong></div>
-                <div class="bot-metric"><span>Daily P&L</span><strong class="muted-text">–</strong></div>
-              </div>
-              <div class="bot-card-actions">
-                <button class="btn btn-secondary small-btn">Configure</button>
-                <button class="btn btn-primary small-btn">Start Bot</button>
-              </div>
-            </article>
-          </div>
-        </section>
-      </div>
+
 
       <!-- ===== PERFORMANCE TAB ===== -->
       <div class="tab-panel" id="performance-tab">
@@ -921,31 +766,31 @@
                 <span class="pill success">London</span>
               </div>
               <ul class="report-list">
-                <li>Volatility conditions remain favorable for the London session.</li>
-                <li>Digit Precision bot posted strongest returns today (+KSh 380).</li>
-                <li>3 out of 4 running bots ended in profit for the day.</li>
+                <li>Volatility conditions remain favorable for the current session.</li>
+                <li>Volatility 75 posted highest consistency today (+KSh 3,800).</li>
+                <li>Overall session win rate recorded at 75% across 24 trades.</li>
               </ul>
             </div>
             <div class="report-card">
               <div class="report-card-header">
                 <h4>Risk Report</h4>
-                <span class="pill warning">Moderate</span>
+                <span class="pill warning">Disciplined</span>
               </div>
               <ul class="report-list">
                 <li>Capital exposure within configured risk band (8.2% / 10%).</li>
-                <li>Signature Grind under review — drawdown exceeds target.</li>
-                <li>Recommend reducing stake size on EUR/USD positions.</li>
+                <li>Daily drawdown guard active and well below threshold.</li>
+                <li>Recommended stake sizes aligned with account equity.</li>
               </ul>
             </div>
             <div class="report-card">
               <div class="report-card-header">
-                <h4>Recommendations</h4>
-                <span class="pill muted">Automated</span>
+                <h4>Prop Evaluation</h4>
+                <span class="pill muted">Phase 1</span>
               </div>
               <ul class="report-list">
-                <li>Increase capital allocation on Premium Bundle — high win rate streak.</li>
-                <li>Bot efficiency improved by 6.2% after reducing order overlap.</li>
-                <li>Review Crash Hunter strategy before next session.</li>
+                <li>Progress towards funded capital target: 71% completed.</li>
+                <li>Minimum trading days criteria satisfied for this week.</li>
+                <li>Risk parameters fully compliant with evaluation rules.</li>
               </ul>
             </div>
           </div>

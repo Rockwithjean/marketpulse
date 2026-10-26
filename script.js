@@ -19,20 +19,50 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================================
   // AUTH FORMS
   // ============================================================
+  const accountStorageKey = (idValue) => `marketpulseAccount:${idValue.trim().toLowerCase()}`;
+
+  function readAccountProfile(idValue) {
+    const savedProfile = localStorage.getItem(accountStorageKey(idValue));
+    return savedProfile ? JSON.parse(savedProfile) : null;
+  }
+
+  function saveAccountProfile(profile) {
+    localStorage.setItem(accountStorageKey(profile.idNumber), JSON.stringify(profile));
+    localStorage.setItem('marketpulseUserProfile', JSON.stringify(profile));
+    localStorage.setItem('marketpulseUserId', profile.idNumber);
+    localStorage.setItem('marketpulseUserEmail', profile.email);
+    localStorage.setItem('marketpulseKycVerified', 'false');
+  }
+
   const loginForm = $('#loginForm');
   const loginIdInput = $('#loginIdInput');
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const idValue = loginIdInput ? loginIdInput.value.trim() : '';
+      const emailInput = $('#loginEmail');
+      const emailValue = emailInput ? emailInput.value.trim() : '';
       if (!idValue) {
         alert('Please enter your ID number before signing in.');
         if (loginIdInput) loginIdInput.focus();
         return;
       }
 
-      localStorage.setItem('marketpulseUserId', idValue);
-      localStorage.setItem('marketpulseKycVerified', 'false');
+      try {
+        const profile = readAccountProfile(idValue);
+        if (profile && profile.email.toLowerCase() === emailValue.toLowerCase()) {
+          localStorage.setItem('marketpulseUserProfile', JSON.stringify(profile));
+        } else {
+          localStorage.removeItem('marketpulseUserProfile');
+        }
+        localStorage.setItem('marketpulseUserId', idValue);
+        localStorage.setItem('marketpulseUserEmail', emailValue);
+        localStorage.setItem('marketpulseKycVerified', 'false');
+      } catch (error) {
+        console.error('Unable to load the saved account profile.', error);
+        alert('Unable to load your account. Please try again.');
+        return;
+      }
 
       const btn = loginForm.querySelector('button[type="submit"]');
       if (btn) {
@@ -49,6 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (signupForm) {
     signupForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      const firstName = $('#signupFirstName').value.trim();
+      const lastName = $('#signupLastName').value.trim();
+      const email = $('#signupEmail').value.trim();
+      const idNumber = $('#signupIdNumber').value.trim();
+      const profile = { firstName, lastName, email, idNumber, realBalance: 0 };
+
+      try {
+        saveAccountProfile(profile);
+      } catch (error) {
+        console.error('Unable to save the new account profile.', error);
+        alert('Unable to create your account. Please try again.');
+        return;
+      }
+
       const btn = signupForm.querySelector('button[type="submit"]');
       if (btn) {
         btn.disabled = true;
@@ -76,6 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let storedUserId = localStorage.getItem('marketpulseUserId') || '';
   const storedKycFileName = localStorage.getItem('marketpulseKycFileName') || '';
+  let currentUserProfile = null;
+  const savedCurrentProfile = localStorage.getItem('marketpulseUserProfile');
+  if (savedCurrentProfile) {
+    try {
+      currentUserProfile = JSON.parse(savedCurrentProfile);
+    } catch (error) {
+      console.error('Unable to read the saved account profile.', error);
+      alert('Unable to load your account profile. Please sign in again.');
+    }
+  }
   const kycState = {
     fileName: storedKycFileName,
     verified: localStorage.getItem('marketpulseKycVerified') === 'true',
@@ -335,7 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     real: {
       label: 'Real Balance',
-      balance: 2450.00,
+      balance: currentUserProfile && Number.isFinite(currentUserProfile.realBalance)
+        ? currentUserProfile.realBalance
+        : 0,
       sub: 'Live account — funds at risk',
       statSub: '+12.8% this month',
       pnl: '+$342.50',
@@ -345,9 +401,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentAccount = 'demo';
 
+  function persistRealBalance() {
+    if (!currentUserProfile || !currentUserProfile.idNumber) return;
+    currentUserProfile.realBalance = accounts.real.balance;
+    const profileJson = JSON.stringify(currentUserProfile);
+    localStorage.setItem('marketpulseUserProfile', profileJson);
+    localStorage.setItem(accountStorageKey(currentUserProfile.idNumber), profileJson);
+  }
+
+  const profileName = currentUserProfile
+    ? [currentUserProfile.firstName, currentUserProfile.lastName].filter(Boolean).join(' ')
+    : '';
+  const userNameEl = $('#userName');
+  const userEmailEl = $('#userEmail');
+  const userAvatarEl = $('#userAvatar');
+  if (userNameEl) userNameEl.textContent = profileName || 'Account holder';
+  if (userEmailEl) {
+    userEmailEl.textContent = (currentUserProfile && currentUserProfile.email)
+      || localStorage.getItem('marketpulseUserEmail')
+      || '';
+  }
+  if (userAvatarEl) {
+    const initials = currentUserProfile
+      ? [currentUserProfile.firstName, currentUserProfile.lastName]
+        .filter(Boolean)
+        .map((name) => name.charAt(0).toUpperCase())
+        .join('')
+      : '';
+    userAvatarEl.textContent = initials || 'MP';
+  }
+
   function switchAccount(type) {
     currentAccount = type;
     const acc = accounts[type];
+    const dashboardShell = document.querySelector('.dashboard-shell');
+    if (dashboardShell) {
+      dashboardShell.classList.toggle('real-mode', type === 'real');
+      dashboardShell.classList.toggle('demo-mode', type === 'demo');
+    }
 
     // Sidebar
     const labelEl = $('#acctLabel');
@@ -502,6 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Deduct stake from balance
     acc.balance = +(acc.balance - stake).toFixed(2);
+    if (currentAccount === 'real') persistRealBalance();
     window.switchAccount(currentAccount); // refresh UI
 
     // Record entry price
@@ -568,6 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (won) {
       acc.balance = +(acc.balance + stake_num + payout).toFixed(2);
     }
+    if (currentAccount === 'real') persistRealBalance();
 
     // Update account UI
     window.switchAccount(currentAccount);

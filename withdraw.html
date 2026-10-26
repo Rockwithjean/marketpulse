@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarketPulse | Withdraw Funds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .withdraw-shell {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 36px 24px 60px;
+        }
+
+        .withdraw-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .withdraw-header h1 {
+            margin: 0;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            letter-spacing: -0.04em;
+        }
+
+        .withdraw-balance {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+            padding: 20px 22px;
+            border: 1px solid rgba(40, 201, 141, 0.2);
+            border-radius: 18px;
+            background: linear-gradient(120deg, rgba(40, 201, 141, 0.1), rgba(255, 255, 255, 0.02));
+        }
+
+        .withdraw-balance span {
+            color: rgba(232, 237, 242, 0.65);
+            font-size: 0.85rem;
+        }
+
+        .withdraw-balance strong {
+            color: #7ef0bf;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .withdraw-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .withdraw-form label {
+            display: grid;
+            gap: 8px;
+            color: rgba(232, 237, 242, 0.72);
+            font-size: 0.86rem;
+            font-weight: 600;
+        }
+
+        .withdraw-form input {
+            width: 100%;
+            min-height: 50px;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.035);
+            color: #e8edf2;
+            font: inherit;
+        }
+
+        .withdraw-form input:focus {
+            border-color: rgba(212, 164, 71,  0.55);
+        }
+
+        .withdraw-form input::placeholder {
+            color: rgba(232, 237, 242, 0.35);
+        }
+
+        .withdraw-hint {
+            margin: -10px 0 0;
+            color: rgba(232, 237, 242, 0.48);
+            font-size: 0.78rem;
+            line-height: 1.55;
+        }
+
+        .withdraw-status {
+            display: none;
+            margin-top: 18px;
+            padding: 16px;
+            border: 1px solid rgba(40, 201, 141, 0.2);
+            border-radius: 14px;
+            background: rgba(40, 201, 141, 0.08);
+            color: rgba(232, 237, 242, 0.82);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .withdraw-status.error {
+            border-color: rgba(255, 90, 89, 0.25);
+            background: rgba(255, 90, 89, 0.08);
+        }
+
+        @media (max-width: 560px) {
+            .withdraw-shell {
+                padding: 24px 16px 40px;
+            }
+
+            .withdraw-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+    <div class="dashboard-shell" style="grid-template-columns:minmax(0, 1fr);">
+        <main class="dashboard-main">
+            <div class="withdraw-shell">
+                <header class="withdraw-header">
+                    <div>
+                        <p class="eyebrow accent">Real account</p>
+                        <h1>Withdraw funds</h1>
+                    </div>
+                    <a href="dashboard.html" class="btn btn-secondary small-btn">Back to Dashboard</a>
+                </header>
+
+                <section class="deposit-panel" aria-label="Withdraw from real account">
+                    <div class="withdraw-balance">
+                        <span>Available real balance</span>
+                        <strong id="withdrawBalance">$0.00</strong>
+                    </div>
+
+                    <form id="withdrawForm" class="withdraw-form">
+                        <label for="withdrawAmount">
+                            Withdrawal amount (USD)
+                            <input id="withdrawAmount" name="amount" type="number" min="0.01" step="0.01"
+                                placeholder="Enter amount" required />
+                        </label>
+                        <p class="withdraw-hint">You can withdraw up to your available real-account balance.</p>
+
+                        <label for="withdrawPhone">
+                            M-Pesa phone number
+                            <input id="withdrawPhone" name="phone" type="tel" autocomplete="tel"
+                                placeholder="e.g. 0712 345 678" required />
+                        </label>
+
+                        <button class="btn btn-primary" id="withdrawButton" type="submit">Request Withdrawal</button>
+                    </form>
+
+                    <div class="withdraw-status" id="withdrawStatus" role="status" aria-live="polite"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const amountInput = document.getElementById('withdrawAmount');
+        const balanceDisplay = document.getElementById('withdrawBalance');
+        const form = document.getElementById('withdrawForm');
+        const status = document.getElementById('withdrawStatus');
+        const submitButton = document.getElementById('withdrawButton');
+        const phoneInput = document.getElementById('withdrawPhone');
+        const userId = localStorage.getItem('marketpulseUserId') || '';
+        const profileKey = 'marketpulseUserProfile';
+        let profile = null;
+        let availableBalance = 0;
+
+        function formatMoney(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function showStatus(message, isError) {
+            status.textContent = message;
+            status.classList.toggle('error', isError);
+            status.style.display = 'block';
+        }
+
+        try {
+            const savedProfile = localStorage.getItem(profileKey);
+            const accountProfile = userId
+                ? localStorage.getItem('marketpulseAccount:' + userId.trim().toLowerCase())
+                : null;
+            const activeProfile = JSON.parse(savedProfile || 'null');
+            const storedAccountProfile = JSON.parse(accountProfile || 'null');
+            const normalizedUserId = userId.trim().toLowerCase();
+            profile = storedAccountProfile
+                && storedAccountProfile.idNumber
+                && storedAccountProfile.idNumber.trim().toLowerCase() === normalizedUserId
+                ? storedAccountProfile
+                : activeProfile;
+        } catch (error) {
+            console.error('Unable to read the saved account profile.', error);
+            showStatus('We could not load your account details. Please sign in again.', true);
+        }
+
+        const profileMatchesUser = profile && profile.idNumber && userId
+            && profile.idNumber.trim().toLowerCase() === userId.trim().toLowerCase();
+        if (!profileMatchesUser) {
+            amountInput.disabled = true;
+            phoneInput.disabled = true;
+            submitButton.disabled = true;
+            if (!status.textContent) {
+                showStatus('Please sign in to request a withdrawal from your real account.', true);
+            }
+        } else {
+            const savedBalance = Number(profile.realBalance);
+            availableBalance = Number.isFinite(savedBalance) ? Math.max(savedBalance, 0) : 0;
+            balanceDisplay.textContent = formatMoney(availableBalance);
+            amountInput.max = availableBalance.toFixed(2);
+            if (availableBalance === 0) {
+                amountInput.disabled = true;
+                phoneInput.disabled = true;
+                submitButton.disabled = true;
+                showStatus('Your real-account balance is $0.00. Add funds to your real account before requesting a withdrawal.');
+            }
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!profileMatchesUser || availableBalance <= 0) return;
+
+            const amount = Number.parseFloat(amountInput.value);
+            const phone = phoneInput.value.trim();
+
+            if (!Number.isFinite(amount) || amount <= 0) {
+                showStatus('Enter a withdrawal amount greater than zero.', true);
+                amountInput.focus();
+                return;
+            }
+            if (amount > availableBalance) {
+                showStatus('The withdrawal amount cannot exceed your available real balance.', true);
+                amountInput.focus();
+                return;
+            }
+            if (!phone) {
+                showStatus('Enter the M-Pesa phone number for the payout.', true);
+                document.getElementById('withdrawPhone').focus();
+                return;
+            }
+
+            const request = {
+                amount: Number(amount.toFixed(2)),
+                phone,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+            };
+            const updatedBalance = Number((availableBalance - request.amount).toFixed(2));
+            const updatedProfile = { ...profile, realBalance: updatedBalance };
+
+            try {
+                const requestsKey = 'marketpulseWithdrawals:' + userId.trim().toLowerCase();
+                const requests = JSON.parse(localStorage.getItem(requestsKey) || '[]');
+                requests.push(request);
+                const profileJson = JSON.stringify(updatedProfile);
+                localStorage.setItem(requestsKey, JSON.stringify(requests));
+                localStorage.setItem(profileKey, profileJson);
+                localStorage.setItem('marketpulseAccount:' + userId.trim().toLowerCase(), profileJson);
+            } catch (error) {
+                console.error('Unable to save the withdrawal request.', error);
+                showStatus('We could not save your request. Your balance has not been changed. Please try again.', true);
+                return;
+            }
+
+            profile = updatedProfile;
+            availableBalance = updatedBalance;
+            balanceDisplay.textContent = formatMoney(availableBalance);
+            amountInput.max = availableBalance.toFixed(2);
+            form.reset();
+            if (availableBalance === 0) {
+                amountInput.disabled = true;
+                phoneInput.disabled = true;
+                submitButton.disabled = true;
+                showStatus('Your withdrawal request for ' + formatMoney(request.amount)
+                    + ' has been recorded as pending. Your remaining real-account balance is $0.00.');
+            } else {
+                showStatus('Your withdrawal request for ' + formatMoney(request.amount)
+                    + ' has been recorded as pending. The amount has been reserved from your real-account balance.');
+            }
+        });
+    </script>
+</body>
+
+</html>

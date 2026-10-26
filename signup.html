@@ -16,7 +16,7 @@
         <div class="secure-tag">New account</div>
         <h1>Build your edge.</h1>
         <p>
-          Set up your account, connect your bots, and start monitoring the market with a
+          Set up your account, access live markets, and trade funded capital with a
           clearer and more disciplined workflow.
         </p>
 
@@ -45,8 +45,13 @@
       <div class="auth-panel auth-form-panel">
         <div class="auth-header">
           <a href="index.html" class="brand" aria-label="MarketPulse home">
-            <span class="brand-mark">MP</span>
-            <span class="brand-text">MarketPulse</span>
+            <span class="brand-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M3 14.5L7.5 9.5L12 14L16.5 6.5L21 11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="16.5" cy="6.5" r="2.2" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="brand-text">Market<span class="brand-accent">Pulse</span></span>
           </a>
           <p>Create account</p>
         </div>
@@ -57,27 +62,27 @@
           <div class="two-col-grid">
             <label>
               <span>First name</span>
-              <input type="text" placeholder="John" required />
+              <input type="text" id="signupFirstName" name="firstName" placeholder="John" required />
             </label>
             <label>
-              <span>Last name</span>
-              <input type="text" placeholder="Kamau" required />
+              <span>Second name (Last name)</span>
+              <input type="text" id="signupLastName" name="lastName" placeholder="Kamau" required />
             </label>
           </div>
 
           <label>
             <span>Email address</span>
-            <input type="email" placeholder="you@example.com" required />
+            <input type="email" id="signupEmail" name="email" placeholder="you@example.com" required />
           </label>
 
           <label>
             <span>Password</span>
-            <input type="password" placeholder="Create a secure password" required />
+            <input type="password" id="signupPassword" name="password" placeholder="Create a secure password" required />
           </label>
 
           <label>
             <span>National ID / Passport Number</span>
-            <input type="text" id="idNumber" placeholder="e.g. 38492011" required />
+            <input type="text" id="signupIdNumber" name="idNumber" placeholder="e.g. 38492011" required />
           </label>
 
           <div class="form-row">
