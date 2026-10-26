@@ -740,15 +740,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const chartContainer = $('#liveChart');
   let chart, candleSeries, priceUpdateInterval, perfChart;
 
+  function getLiveChartHeight() {
+    return window.innerWidth <= 640 ? 360 : 320;
+  }
+
   function resizeCharts() {
     if (chart && chartContainer) {
-      const width = Math.max(chartContainer.clientWidth, 360);
-      chart.applyOptions({ width });
+      chart.applyOptions({
+        width: chartContainer.clientWidth,
+        height: getLiveChartHeight(),
+      });
     }
     if (perfChart) {
       const perfContainer = $('#perfChart');
       if (perfContainer) {
-        perfChart.applyOptions({ width: Math.max(perfContainer.clientWidth, 360) });
+        perfChart.applyOptions({ width: perfContainer.clientWidth });
       }
     }
   }
@@ -788,10 +794,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function initChart() {
     if (!chartContainer || typeof LightweightCharts === 'undefined') return;
 
-    const isDark = true;
     chart = LightweightCharts.createChart(chartContainer, {
-      width: Math.max(chartContainer.clientWidth, 360),
-      height: 320,
+      width: chartContainer.clientWidth,
+      height: getLiveChartHeight(),
       layout: {
         background: { color: '#07131d' },
         textColor: 'rgba(200,210,220,0.8)',
@@ -833,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Responsive resize
     const ro = new ResizeObserver(() => {
-      if (chart) chart.applyOptions({ width: chartContainer.clientWidth });
+      resizeCharts();
     });
     ro.observe(chartContainer);
   }
